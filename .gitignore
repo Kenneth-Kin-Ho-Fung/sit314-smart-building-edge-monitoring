@@ -1,0 +1,12 @@
+# Private deployment configuration and credentials
+esp32_s3_final_node/private_config.h
+edge_gateway/.edge_gateway.env
+
+# Runtime logs and generated test data
+edge_gateway/data/
+edge_gateway/*.log
+simulation/outputs/
+report/qa_*/
+report/*.pdf
+__pycache__/
+**/__pycache__/
