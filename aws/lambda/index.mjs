@@ -3,7 +3,7 @@ export const handler = async (event) => {
     Object.entries(event?.headers || {}).map(([key, value]) => [key.toLowerCase(), value]),
   );
   const expectedToken = process.env.EDGE_SHARED_TOKEN;
-  if (expectedToken && headers["x-edge-token"] !== expectedToken) {
+  if (!expectedToken || headers["x-edge-token"] !== expectedToken) {
     return {
       statusCode: 401,
       body: JSON.stringify({ ok: false, error: "unauthorised edge event" }),
