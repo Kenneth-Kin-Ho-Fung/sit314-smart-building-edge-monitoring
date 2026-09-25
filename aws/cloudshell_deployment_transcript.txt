@@ -1,0 +1,12 @@
+AWS CloudShell deployment and validation transcript
+Date: 2026-09-25, Australia/Sydney (AWS us-east-1)
+
+Deployment command outcome:
+2026-09-24T22:25:25.000+0000
+
+Validation command invoked sit314-edge-telemetry with:
+{"deviceId":"sim-esp32s3-aws-001","room":"B1-F3-R302","mq2Ready":true,"mq2AbsDelta":420,"flameDetected":false,"alarm":true,"pirMotion":true}
+
+AWS CLI result:
+200
+{"statusCode":200,"body":"{\"ok\":true,\"deviceId\":\"sim-esp32s3-aws-001\",\"mq2Ready\":true,\"severity\":\"critical\",\"action\":\"forward_to_cloud_or_dashboard\",\"reasons\":[\"mq2_critical_delta\"]}"}
