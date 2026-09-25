@@ -1,0 +1,8 @@
+#pragma once
+
+// Copy this file to private_config.h and set local values. Do not commit it.
+const char* WIFI_SSID = "CHANGE_ME";
+const char* WIFI_PASSWORD = "CHANGE_ME";
+const char* EDGE_TELEMETRY_URL = "http://CHANGE_ME_PI_IP:3000/telemetry";
+// Must match DEVICE_SHARED_TOKEN in the Raspberry Pi gateway environment.
+const char* DEVICE_SHARED_TOKEN = "CHANGE_ME";
