@@ -1,0 +1,10 @@
+{
+  "name": "sit314-smart-building-edge-gateway",
+  "version": "1.0.0",
+  "description": "Raspberry Pi edge gateway for SIT314 6.3D final smart building IoT project",
+  "main": "edge_server.js",
+  "scripts": {
+    "start": "node edge_server.js"
+  },
+  "license": "UNLICENSED"
+}
