@@ -57,11 +57,13 @@ const stats = {
 function readRequestBody(req, maxBytes = 256 * 1024) {
   return new Promise((resolve, reject) => {
     let body = "";
+    let exceeded = false;
     req.on("data", (chunk) => {
+      if (exceeded) return;
       body += chunk;
       if (body.length > maxBytes) {
-        reject(new Error("Request body too large"));
-        req.destroy();
+        exceeded = true;
+        reject(Object.assign(new Error("Request body too large"), { statusCode: 413 }));
       }
     });
     req.on("end", () => resolve(body));
@@ -85,6 +87,7 @@ function validDeviceToken(candidate) {
 }
 
 function numberOrNull(value) {
+  if (value === null || value === undefined || value === "") return null;
   const n = Number(value);
   return Number.isFinite(n) ? n : null;
 }
@@ -135,7 +138,7 @@ function normaliseTelemetry(payload, sourceIp) {
     receivedAt: new Date().toISOString(),
     sourceIp,
     deviceId,
-    room: payload.room || payload.location || "B1-F3-R302",
+    room: payload.room || "B1-F3-R302",
     location: payload.location || "building1/floor3/room302",
     temperature: numberOrNull(payload.temperature),
     humidity: numberOrNull(payload.humidity),
@@ -369,12 +372,13 @@ async function handleTelemetry(req, res) {
       stats,
     });
   } catch (error) {
-    sendJson(res, 400, { ok: false, error: error.message });
+    sendJson(res, error.statusCode || 400, { ok: false, error: error.message });
   }
 }
 
 const server = http.createServer((req, res) => {
-  const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
+  // Use a fixed base so an invalid client Host header cannot crash routing.
+  const url = new URL(req.url, "http://localhost");
 
   if (req.method === "POST" && url.pathname === "/telemetry") {
     handleTelemetry(req, res);
