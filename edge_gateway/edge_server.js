@@ -378,7 +378,13 @@ async function handleTelemetry(req, res) {
 
 const server = http.createServer((req, res) => {
   // Use a fixed base so an invalid client Host header cannot crash routing.
-  const url = new URL(req.url, "http://localhost");
+  let url;
+  try {
+    url = new URL(req.url, "http://localhost");
+  } catch {
+    sendJson(res, 400, { ok: false, error: "Bad request" });
+    return;
+  }
 
   if (req.method === "POST" && url.pathname === "/telemetry") {
     handleTelemetry(req, res);
