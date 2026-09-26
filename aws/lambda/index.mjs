@@ -19,6 +19,14 @@ export const handler = async (event) => {
       body: JSON.stringify({ ok: false, error: "invalid JSON payload" }),
     };
   }
+
+  // A bounded test-only delay makes a short, observable concurrency test possible.
+  // Production telemetry omits this optional field and proceeds without delay.
+  const scaleTestDelayMs = Number(payload?.scaleTestDelayMs) || 0;
+  if (scaleTestDelayMs > 0 && scaleTestDelayMs <= 2000) {
+    await new Promise((resolve) => setTimeout(resolve, scaleTestDelayMs));
+  }
+
   const bool = (value) => value === true || value === "true" || value === 1 || value === "1";
   const mq2Ready = bool(payload?.mq2Ready);
   const delta = Number(payload?.mq2AbsDelta) || 0;
